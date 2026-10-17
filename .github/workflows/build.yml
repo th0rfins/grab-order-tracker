@@ -20,8 +20,10 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - name: Pin npm
+        run: npm install --global npm@10.8.2
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: Test
         run: npm test
       - name: Typecheck
@@ -42,6 +44,12 @@ jobs:
           java-version: 17
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.9
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Install Android SDK packages
+        run: yes | sdkmanager --licenses >/dev/null && sdkmanager "platforms;android-35" "build-tools;35.0.0"
       - name: Build debug APK
         working-directory: apps/android
         run: gradle assembleDebug
