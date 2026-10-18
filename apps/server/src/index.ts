@@ -1,6 +1,10 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import fastifyStatic from "@fastify/static";
 import Database from "better-sqlite3";
+import { existsSync, mkdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { setTimeout as sleep } from "node:timers/promises";
 export const isGrabUrl = (input: string) => {
   try {
@@ -32,6 +36,10 @@ type Row = {
   created_at: string;
   updated_at: string;
 };
+const dbDirectory = process.env.DB_PATH
+  ? dirname(process.env.DB_PATH)
+  : ".";
+if (!existsSync(dbDirectory)) mkdirSync(dbDirectory, { recursive: true });
 const db = new Database(process.env.DB_PATH || "orders.sqlite");
 db.pragma("journal_mode = WAL");
 db.exec(
@@ -51,6 +59,18 @@ const app = Fastify({ logger: true });
 await app.register(cors, {
   origin: process.env.CORS_ORIGIN?.split(",") || true,
 });
+const webDist = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "../../web/dist",
+);
+if (existsSync(webDist)) {
+  await app.register(fastifyStatic, { root: webDist, wildcard: false });
+  app.setNotFoundHandler((req, reply) => {
+    if (req.raw.url?.startsWith("/api"))
+      return reply.code(404).send({ error: "Not found" });
+    return reply.sendFile("index.html");
+  });
+}
 app.get("/health", async () => ({ ok: true }));
 app.get("/api/orders", async () => list.all());
 app.post<{ Body: { url?: string } }>("/api/orders", async (req, reply) => {

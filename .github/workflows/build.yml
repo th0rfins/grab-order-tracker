@@ -18,10 +18,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 22.22.2
           cache: npm
       - name: Install dependencies
-        run: npx --yes npm@11.5.2 ci --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: Test
         run: npm test
       - name: Typecheck

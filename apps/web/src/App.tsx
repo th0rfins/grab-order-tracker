@@ -15,7 +15,7 @@ type Order = {
   created_at: string;
   updated_at: string;
 };
-const api = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const api = import.meta.env.VITE_API_URL ?? "";
 export default function App() {
   const [orders, setOrders] = useState<Order[]>([]),
     [url, setUrl] = useState(""),
