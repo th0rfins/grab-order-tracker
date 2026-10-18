@@ -8,6 +8,6 @@
   "scripts": {
     "build": "npm run build --workspace @grab-tracker/server && npm run build --workspace @grab-tracker/web",
     "test": "npm run test --workspace @grab-tracker/server",
-    "typecheck": "npm run build --workspace @grab-tracker/server && npm exec --workspace @grab-tracker/web -- tsc --noEmit"
+    "typecheck": "npm run build --workspace @grab-tracker/server && npm run typecheck --workspace @grab-tracker/web"
   }
 }
