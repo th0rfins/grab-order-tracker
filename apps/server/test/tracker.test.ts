@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import { strict as assert } from "node:assert";
-import { isGrabUrl, isExpired } from "../src/index.js";
+import { isGrabUrl, isExpired } from "../src/tracker.js";
 test("accepts supported Grab share URLs only", () => {
   assert.equal(isGrabUrl("https://app.grab.com/s/abc123"), true);
   assert.equal(isGrabUrl("https://sharelocation.grab.com/o/abc123"), true);
