@@ -57,7 +57,7 @@ app.post<{ Body: { url?: string } }>("/api/orders", async (req, reply) => {
   if (!req.body?.url || !isGrabUrl(req.body.url))
     return reply.code(400).send({ error: "Invalid Grab share link" });
   const now = new Date().toISOString();
-  insert.run(req.body.url, null, "PENDING", now, now);
+  insert.run(req.body.url, null, now, now);
   return reply.code(201).send({ ok: true });
 });
 app.get("/api/analytics", async () => ({
